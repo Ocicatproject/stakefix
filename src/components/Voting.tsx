@@ -640,9 +640,13 @@ const cooldownActive =
       );
     }}
   >
-    {loading ? "Starting Cooldown..." : "Start Cooldown"}
-  </Button>
+    
+  {loading ? "Withdrawing..." : "Withdraw"}
+</Button>
 )}
+</>
+)}
+
       
     
   
