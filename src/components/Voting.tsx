@@ -172,7 +172,7 @@ console.log("cooldown[1]:", (cooldownInfo as any)?.[1]);
 
 console.log("cooldownInfo =", cooldownInfo);
 const unlockTime = cooldownInfo
-  ? Number((cooldownInfo as any)[0])
+  ? Number((cooldownInfo as any)[1])
   : 0;
 
 const currentTime = Math.floor(Date.now() / 1000);
