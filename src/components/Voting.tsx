@@ -77,9 +77,7 @@ const useCountdown = (targetTimestamp: number) => {
 // export default useCountdown;
 const CountdownTimer = ({ targetTimestamp }: { targetTimestamp: number }) => {
   // console.log(targetTimestamp);
-  const countdown = useCountdown(
-  Math.floor(targetTimestamp / 1000)
-);
+  const countdown = useCountdown(targetTimestamp);
 
   return <div>{countdown}</div>;
 };
@@ -174,15 +172,17 @@ console.log("cooldown[1]:", (cooldownInfo as any)?.[1]);
 
 console.log("cooldownInfo =", cooldownInfo);
 const unlockTime = cooldownInfo
-  ? Number((cooldownInfo as any)[1])
+  ? Number((cooldownInfo as any)[0])
   : 0;
 
-const cooldownActive = unlockTime > 0;
+const currentTime = Math.floor(Date.now() / 1000);
 
 const cooldownFinished =
-  cooldownActive &&
   unlockTime > 0 &&
-  Date.now() >= unlockTime * 1000;
+  unlockTime <= currentTime;
+
+const cooldownActive =
+  unlockTime > currentTime;
   // const [stakeAmount, setStakeAmount] = useState(0);
   // // console.log(userStakes)
   // if (userStakes) {
@@ -570,81 +570,83 @@ const cooldownFinished =
               )}
          {stakeAction === "Unstake" && (
   <>
-    {!cooldownActive ? (
-      <Button
-        className="w-full bg-red-600 hover:bg-red-700 mt-2"
-        onClick={() => {
-          setLoading(true);
+    {cooldownFinished ? (
+  <Button
+    className="w-full bg-green-600 hover:bg-green-700 mt-2"
+    onClick={() => {
+      setLoading(true);
 
-          writeContract(
-            {
-              address:
-                coinType === "OCICAT"
-                  ? OCICAT_SPENDER
-                  : BNBLIQ_SPENDER,
-              abi:
-                coinType === "OCICAT"
-                  ? STAKING_CONTRACT_ABI
-                  : STAKING_LIQ_CONTRACT_ABI,
-              functionName: "unstake",
-            },
-            {
-              onSuccess(data) {
-                console.log(data);
-                setLoading(false);
-              },
-              onError() {
-                setLoading(false);
-              },
-            }
-          );
-        }}
-      >
-        {loading ? "Starting Cooldown..." : "Start Cooldown"}
-      </Button>
-    ) : cooldownFinished ? (
-      <Button
-        className="w-full bg-green-600 hover:bg-green-700 mt-2"
-        onClick={() => {
-          setLoading(true);
+      writeContract(
+        {
+          address:
+            coinType === "OCICAT"
+              ? OCICAT_SPENDER
+              : BNBLIQ_SPENDER,
+          abi:
+            coinType === "OCICAT"
+              ? STAKING_CONTRACT_ABI
+              : STAKING_LIQ_CONTRACT_ABI,
+          functionName: "withdrawAfterCooldown",
+        },
+        {
+          onSuccess(data) {
+            console.log(data);
+            setLoading(false);
+          },
+          onError() {
+            setLoading(false);
+          },
+        }
+      );
+    }}
+  >
+    {loading ? "Withdrawing..." : "Withdraw"}
+  </Button>
+) : cooldownActive ? (
+  <div className="text-center text-sm text-gray-400">
+    Cooldown Active
 
-          writeContract(
-            {
-              address:
-                coinType === "OCICAT"
-                  ? OCICAT_SPENDER
-                  : BNBLIQ_SPENDER,
-              abi:
-                coinType === "OCICAT"
-                  ? STAKING_CONTRACT_ABI
-                  : STAKING_LIQ_CONTRACT_ABI,
-              functionName: "withdrawAfterCooldown",
-            },
-            {
-              onSuccess(data) {
-                console.log(data);
-                setLoading(false);
-              },
-              onError() {
-                setLoading(false);
-              },
-            }
-          );
-        }}
-      >
-        {loading ? "Withdrawing..." : "Withdraw"}
-      </Button>
-    ) : (
-      <div className="text-center text-sm text-gray-400">
-        Cooldown Active
+    <CountdownTimer
+      targetTimestamp={unlockTime}
+    />
+  </div>
+) : (
+  <Button
+    className="w-full bg-red-600 hover:bg-red-700 mt-2"
+    onClick={() => {
+      setLoading(true);
 
-        <CountdownTimer
-          targetTimestamp={unlockTime}
-        />
-      </div>
-    )}
-  </>
+      writeContract(
+        {
+          address:
+            coinType === "OCICAT"
+              ? OCICAT_SPENDER
+              : BNBLIQ_SPENDER,
+          abi:
+            coinType === "OCICAT"
+              ? STAKING_CONTRACT_ABI
+              : STAKING_LIQ_CONTRACT_ABI,
+          functionName: "unstake",
+        },
+        {
+          onSuccess(data) {
+            console.log(data);
+            setLoading(false);
+          },
+          onError() {
+            setLoading(false);
+          },
+        }
+      );
+    }}
+  >
+    {loading ? "Starting Cooldown..." : "Start Cooldown"}
+  </Button>
 )}
+      
+    
+  
+
 
           {stakeAction === "Claim" &&
             (Number(claimAmount) <= 0 ? (
