@@ -176,6 +176,10 @@ const unlockTime = cooldownInfo
   : 0;
 
 const currentTime = Math.floor(Date.now() / 1000);
+console.log("unlockTime =", unlockTime);
+console.log("currentTime =", currentTime);
+console.log("finished =", cooldownFinished);
+console.log("active =", cooldownActive);
 
 const cooldownFinished =
   unlockTime > 0 &&
