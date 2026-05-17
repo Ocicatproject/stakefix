@@ -172,9 +172,7 @@ const unlockTime = cooldownInfo
   ? Number((cooldownInfo as any).unlockTime)
   : 0;
 
-const cooldownActive = cooldownInfo
-  ? (cooldownInfo as any).active
-  : false;
+const cooldownActive = unlockTime > 0;
 
 const cooldownFinished =
   cooldownActive &&
