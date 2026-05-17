@@ -168,8 +168,9 @@ const StakingContent = ({
   },
 });
 
+console.log("cooldownInfo =", cooldownInfo);
 const unlockTime = cooldownInfo
-  ? Number((cooldownInfo as any).unlockTime)
+  ? Number((cooldownInfo as any)[0])
   : 0;
 
 const cooldownActive = unlockTime > 0;
