@@ -168,9 +168,13 @@ const StakingContent = ({
   },
 });
 
+console.log("cooldown raw:", cooldownInfo);
+console.log("cooldown[0]:", (cooldownInfo as any)?.[0]);
+console.log("cooldown[1]:", (cooldownInfo as any)?.[1]);
+
 console.log("cooldownInfo =", cooldownInfo);
 const unlockTime = cooldownInfo
-  ? Number((cooldownInfo as any)[0])
+  ? Number((cooldownInfo as any)[1])
   : 0;
 
 const cooldownActive = unlockTime > 0;
@@ -635,7 +639,7 @@ const cooldownFinished =
         Cooldown Active
 
         <CountdownTimer
-          targetTimestamp={unlockTime * 1000}
+          targetTimestamp={unlockTime}
         />
       </div>
     )}
