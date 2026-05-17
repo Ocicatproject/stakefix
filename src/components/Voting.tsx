@@ -179,10 +179,10 @@ const currentTime = Math.floor(Date.now() / 1000);
 
 const cooldownFinished =
   unlockTime > 0 &&
-  unlockTime <= currentTime;
+  currentTime >= unlockTime;
 
 const cooldownActive =
-  unlockTime > currentTime;
+  !cooldownFinished && unlockTime > 0;
   // const [stakeAmount, setStakeAmount] = useState(0);
   // // console.log(userStakes)
   // if (userStakes) {
@@ -641,7 +641,7 @@ const cooldownActive =
     }}
   >
     
-  {loading ? "Withdrawing..." : "Withdraw"}
+  {loading ? "Starting Cooldown..." : "Start Cooldown"}
 </Button>
 )}
 </>
