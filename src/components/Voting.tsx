@@ -112,7 +112,7 @@ const StakingContent = ({
   },
 });
 
-const status = cooldownStatus?.toString();
+const status = cooldownStatus?.toString().trim();
 
   //read amount staked of wallet (OCICAT)
   const {
@@ -531,7 +531,7 @@ const status = cooldownStatus?.toString();
 
       {stakeAction === "Unstake" && (
   <>
-    {status === "Ready to withdraw" ? (
+    {status?.includes("Ready") ? (
       <Button
         className="w-full bg-green-600 hover:bg-green-700 mt-2"
         onClick={() => {
@@ -563,7 +563,7 @@ const status = cooldownStatus?.toString();
       >
         {loading ? "Withdrawing..." : "Withdraw"}
       </Button>
-    ) : status === "Cooldown active" ? (
+    ) : status?.includes("Cooldown") ? (
       <Button
         disabled
         className="w-full bg-red-600 hover:bg-red-600 mt-2 opacity-100"
