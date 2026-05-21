@@ -383,7 +383,7 @@ const status = cooldownStatus?.toString().trim();
               onClick={() => {
                 if (coinType === "OCICAT") {
                   if (tokenBalance) {
-                    setNumber(tokenBalance.toString());
+                    setNumber(Math.floor(Number(tokenBalance)).toString());
                   } else {
                     setNumber("0");
                   }
