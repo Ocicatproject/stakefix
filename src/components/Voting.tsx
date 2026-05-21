@@ -415,7 +415,10 @@ const status = cooldownStatus?.toString().trim();
                       ? " hover:bg-red-700"
                       : " hover:bg-red-700"
                   }`}
-                  size="lg"
+                   size="lg"
+                   disabled={
+                  !isConnected || status?.includes("Cooldown")
+                  }
                 onClick={async () => {
                   // console.log("staking amount  : " ,convertFromFloat(Number(parseFloat(number)), 18));
                     // console.log(Number(number));
@@ -479,6 +482,8 @@ const status = cooldownStatus?.toString().trim();
                     ? stakeAction === "Stake"
                       ? "Staking...."
                       : "Unstaking...."
+                    : status?.includes("Cooldown")
+                     ? "Cooldown Active"
                     : stakeAction}
                 </Button>
               )
